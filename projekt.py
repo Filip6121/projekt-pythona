@@ -1,38 +1,64 @@
-ekwipunek = {'miecz': 1, 'mikstura': 3, 'złoto': 15}
+ekwipunek = {"miecz": 1, "mikstura": 3, "zloto": 50}
 
 def pokaz():
     print(ekwipunek)
 
 def dodaj():
-    n = input("Podaj przedmiot\n")
-    if sum(ekwipunek.values()) < 20:
-        if n in ekwipunek:
-            ekwipunek[n] += 1
-        else:
-            ekwipunek[n] = 1
+    nazwa = input("Podaj przedmiot\n")
+    if nazwa == "zloto":
+        print("Nie mozna dodać zlota")
+        return
+    ilosc = int(input("Podaj ilosc\n"))
+    cena = int(input("Podaj cene za sztuke\n"))
+    waga = int(input("Podaj wage za sztuke\n"))
+    
+    koszt = ilosc * cena
+    dodana_waga = ilosc * waga
+    
+    aktualna_waga = 0
+    for przed in ekwipunek:
+        if przed != "zloto":
+            aktualna_waga += ekwipunek[przed]
+            
+    if ekwipunek["zloto"] < koszt:
+        print("Nie masz tyle złota!")
+    elif aktualna_waga + dodana_waga > 20:
+        print("Za ciężko! Przekroczono limit wagi 20.")
     else:
-        print("Limit 20 sztuk osiągnięty")
+        ekwipunek["zloto"] -= koszt
+        if nazwa in ekwipunek:
+            ekwipunek[nazwa] += ilosc
+        else:
+            ekwipunek[nazwa] = ilosc
+        print("Kupiono i dodano pomyślnie!")
 
 def uzyj():
-    a = input("Podaj przedmiot\n")
-    if a in ekwipunek:
-        ekwipunek[a] -= 1
-        if ekwipunek[a] <= 0:
-            del ekwipunek[a]
+    nazwa = input("Podaj przedmiot\n")
+    if nazwa in ekwipunek and nazwa != "zloto":
+        wybor = input("Wpisz 'u' (użyj) lub 's' (sprzedaj)\n")
+        if wybor == "u":
+            ekwipunek[nazwa] -= 1
+            print("Użyto przedmiotu.")
+        elif wybor == "s":
+            ekwipunek[nazwa] -= 1
+            ekwipunek["zloto"] += 10
+            print("Sprzedano przedmiot za 10 złota.")
+            
+        if ekwipunek[nazwa] <= 0:
+            del ekwipunek[nazwa]
     else:
-        print("Nie ma tego przedmiotu w ekwipunku")
+        print("Nie ma takiego przedmiotu w ekwipunku.")
 
 def sprawdz():
-    c = input("Podaj przedmiot\n")
-    if c in ekwipunek:
-        print(c, "jest w ekwipunku")
+    nazwa = input("Podaj przedmiot\n")
+    if nazwa in ekwipunek:
+        print(nazwa, "jest w ekwipunku, ilość:", ekwipunek[nazwa])
     else:
-        print("Nie ma tego przedmiotu w ekwipunku")
-
+        print("Nie ma tego przedmiotu.")
 
 print("1. Pokaz przedmioty")
 print("2. Dodaj przedmiot")
-print("3. Uzyj przedmiotu")
+print("3. Uzyj / Sprzedaj")
 print("4. Sprawdz przedmiot")
 print("5. Wyjdz")
 
